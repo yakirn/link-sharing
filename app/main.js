@@ -5,7 +5,7 @@ function uploadFiles(e){
     //TODO: Add form validation
     var formData = new FormData($(this)[0]);
     $.ajax({
-        url: '/uploads',
+        url: '/files',
         data: formData,
         cache: false,
         contentType: false,

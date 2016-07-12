@@ -30,8 +30,32 @@ router.post('/', upload.single('thefile'), function(req, res, next){
     });
 })
 
+router.get('/:id', function(req, res, next) {
+        var d = require('domain').create()
+        d.on('error', function(e){
+            if(e.statusCode)
+                res.sendStatus(e.statusCode);
+            else {
+                res.status(500).json(e.message || 'Internal server error');
+            }
+        })
+        d.run(function(){
+            var s3 = new AWS.S3(),
+                fileKey = req.params.id,
+                params = {
+                    Bucket: 'lsfirstbucket',
+                    Key: fileKey
+                };
+
+            res.attachment(fileKey);
+            var fileStream = s3.getObject(params).createReadStream();
+            fileStream.pipe(res);
+        })
+
+})
+
 function sendError(res, err, a){
-    res.status(500).json(Object.assign({a}, err))
+    res.status(500).json(a ? Object.assign({a}, err) : err)
 }
 
 module.exports = router;
