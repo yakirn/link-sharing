@@ -19,6 +19,8 @@ router.post('/', upload.single('thefile'), function(req, res, next){
       s3.putObject({
           Bucket: 'lsfirstbucket',
           Key: req.file.filename,
+          ACL: 'private',
+          ServerSideEncryption: 'AES256',
           Body: data
       }, function(err, data) {
           if (err) { sendError(res, err, 'failed to put object'); return;}
