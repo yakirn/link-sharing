@@ -2,9 +2,8 @@ import $ from 'jquery'
 
 function uploadFiles(e){
     e.preventDefault();
+    //TODO: Add form validation
     var formData = new FormData($(this)[0]);
-    console.debug(formData);
-
     $.ajax({
         url: '/uploads',
         data: formData,
@@ -20,4 +19,4 @@ function uploadFiles(e){
 }
 $(() => {
     $('#file-upload').submit(uploadFiles);
-})
+});
