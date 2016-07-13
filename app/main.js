@@ -1,22 +1,27 @@
 import $ from 'jquery'
+import Backbone from 'backbone'
+import AppView from './AppView'
 
-function uploadFiles(e){
-    e.preventDefault();
-    //TODO: Add form validation
-    var formData = new FormData($(this)[0]);
-    $.ajax({
-        url: '/files',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        type: 'POST',
-        success: function(data){
-            console.debug(data);
-        }
-    });
-
-}
 $(() => {
-    $('#file-upload').submit(uploadFiles);
+    const AppRouter = Backbone.Router.extend({
+        routes: {
+            '(/)' : 'home',
+            '/:id': 'donwload'
+        },
+
+        initialize: function(){
+            this.appView = new AppView()
+        },
+
+        home: function(){
+            this.appView.renderFileUpload()
+        },
+
+        donwload: function(){
+            console.error("Not implemented");
+        }
+    })
+
+    window.router = new AppRouter()
+    Backbone.history.start()
 });

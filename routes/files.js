@@ -10,15 +10,17 @@ var upload = multer({storage: storage}),
     base64url = require('base64-url'),
     AWS = require('aws-sdk'),
     fs = require('fs');
-
 /*
     *   This route handles file uploads using multer package and responds with a url to retreive the file.
     *   TODO:
     *       1) Handle passwords
             2) Create read stream instead of readFile: http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-examples.html#Amazon_S3__Uploading_an_arbitrarily_sized_stream__upload_
-    *       2) Stream file directly to s3 without saving it to the file system first. Consider the following options:
-                a) Replace multer with node-multiparty, see https://github.com/andrewrk/node-multiparty/blob/master/examples/s3.js
-                b) Provide a form to directly upload to s3 http://aws.amazon.com/articles/1434
+    *       3) Consider streaming directly to s3 without saving it to the file system first by
+                replacing multer with node-multiparty, see https://github.com/andrewrk/node-multiparty/blob/master/examples/s3.js
+                this approach needs more research regarding performance when handling large files
+            4) Alternatively, Provide a form to directly upload to s3 http://aws.amazon.com/articles/1434
+                this approach is probably the best in terms of efficiency and scalability, but it makes the API harder to consume
+            5) Alternatively, Force to upload large files in chunks, upload to s3 by appending each chunk.
 */
 router.post('/', upload.single('thefile'), function(req, res, next){
     var s3 = new AWS.S3(),
@@ -27,6 +29,7 @@ router.post('/', upload.single('thefile'), function(req, res, next){
       if (err) { sendError(res, err, 'failed to read file bucket'); return;}
       var storeFileKey = generateStoreKey(req.file.originalname);
       s3.putObject({
+          // TODO: Get bucket name from config, save original file name as meta
           Bucket: 'lsfirstbucket',
           Key: storeFileKey,
           ACL: 'private',
@@ -35,7 +38,8 @@ router.post('/', upload.single('thefile'), function(req, res, next){
       }, function(err, data) {
           if (err) { sendError(res, err, 'failed to put object'); return;}
 
-          else res.json({status: 'success', slug: getSecureSlug(storeFileKey)})
+          //TODO: Find a way to get the base address from code or use config
+          else res.json({status: 'success', link: 'http://localhost:8080/files/' + getSecureSlug(storeFileKey)})
 
           fs.unlinkSync(filePath);
       });
@@ -46,7 +50,7 @@ router.post('/', upload.single('thefile'), function(req, res, next){
     *   creates a name in the following format:
     *   YYYY-MM-DD/<Unix time in ms>__originalFileName
     *   TODO:
-    *       1) Make the name generation more unique by adding a random string.
+    *       1) Do no relay on original file's name. instead generate a random string.
 */
 function generateStoreKey(originalFileName){
     var now = new Date(),
@@ -90,6 +94,8 @@ router.post('/:file', function(req, res, next) {
                 res.status(403).json({reason: 'Link expired'})
                 return;
             }
+            // TODO: extract original file name from meta, and use it instead of the key
+            //          (So that the user will get the same file name when downloading)
             res.attachment(fileKey);
             var fileStream = s3.getObject(params).createReadStream();
             fileStream.pipe(res);
