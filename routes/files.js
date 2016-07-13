@@ -57,7 +57,10 @@ router.post('/', upload.single('fileupload'), function(req, res, next){
                   }
 
                   //TODO: Find a way to get the base address from code or use config
-                  else res.json({status: 'success', link: 'http://localhost:8080/files/' + getSecureSlug(storeFileKey, password)})
+                  else {
+                      const slug = 'files/' + getSecureSlug(storeFileKey, password)
+                      res.json({status: 'success', link: 'http://localhost:8080/' + slug, slug: slug})
+                  }
 
                   fs.unlinkSync(filePath);
               });

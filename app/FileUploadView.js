@@ -9,7 +9,8 @@ const FileUploadView = Backbone.View.extend({
     linkTemplate: _.template(ShareLinkTemplate),
 
     events: {
-        'submit .file-upload': 'uploadFiles'
+        'submit .file-upload': 'formSubmitHandler',
+        'click .file-link a' : 'linkClickHandler'
     },
 
     initialize: function(){
@@ -34,10 +35,16 @@ const FileUploadView = Backbone.View.extend({
     },
 
     getLinkView: function(link){
-        return this.linkTemplate({link: link.get('link')})
+        return this.linkTemplate(link.toJSON())
     },
 
-    uploadFiles: function(e){
+    linkClickHandler: function(e){
+        e.preventDefault()
+        console.log(e)
+        this.trigger('link:clicked', $(e.currentTarget).attr('href'))
+    },
+
+    formSubmitHandler: function(e){
         e.preventDefault();
         if(!this.validateForm()) return;
         this.hideExplenation()
@@ -54,7 +61,7 @@ const FileUploadView = Backbone.View.extend({
         })
         .done((response) => {
             if(response && response.link)
-                this.collection.add(new Backbone.Model({link: response.link}))
+                this.collection.add(new Backbone.Model({link: response.link, slug: response.slug}))
         })
         .fail((error) => {
             //TODO: Notify the user something went wrong
@@ -64,6 +71,7 @@ const FileUploadView = Backbone.View.extend({
             this.formReady()
         })
     },
+
     pwdRegex: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])[a-zA-Z0-9!@#$%]{6,}$/,
     validateForm: function() {
         //TODO use a library for form validation

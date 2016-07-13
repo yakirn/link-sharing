@@ -6,22 +6,22 @@ $(() => {
     const AppRouter = Backbone.Router.extend({
         routes: {
             '(/)' : 'home',
-            '/:id': 'donwload'
+            'files/:id': 'downloadFile'
         },
 
         initialize: function(){
-            this.appView = new AppView()
+            this.appView = new AppView({router: this})
         },
 
         home: function(){
             this.appView.renderFileUpload()
         },
 
-        donwload: function(){
-            console.error("Not implemented");
+        downloadFile: function(fileId){
+            this.appView.renderFileDownload(fileId)
         }
     })
 
     window.router = new AppRouter()
-    Backbone.history.start()
+    Backbone.history.start({pushState: true})
 });
