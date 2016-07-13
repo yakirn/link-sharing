@@ -1,8 +1,12 @@
 <h1>Link Sharing</h1>
 <p>Upload your file for secure sharing</p>
 <form class="file-upload">
-    <input type="password" name="password">
-    <input type="file" name="thefile" />
-    <input type="submit" name="btn-submit" value="Start upload">
+    <div class="file-pwd-container">
+        <input class="file-pwd" type="password" name="password">
+    </div>
+    <div class="file-input-container">
+        <input class="file-input" type="file" name="fileupload" />
+    </div>
+    <input class="btn-submit" type="submit" name="btn-submit" value="Start upload">
 </form>
-<ul class="share-links"></ul>
+<ol class="share-links"></ol>

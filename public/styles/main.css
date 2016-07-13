@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.file-upload .validation-warning{
+    color: red;
+    font-size: 12px
+}
+.share-links .link{
+    background-color: #FFFFD5;
+}

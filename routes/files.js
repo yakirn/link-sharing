@@ -22,7 +22,7 @@ var upload = multer({storage: storage}),
                 this approach is probably the best in terms of efficiency and scalability, but it makes the API harder to consume
             5) Alternatively, Force to upload large files in chunks, upload to s3 by appending each chunk.
 */
-router.post('/', upload.single('thefile'), function(req, res, next){
+router.post('/', upload.single('fileupload'), function(req, res, next){
     var s3 = new AWS.S3(),
         filePath = req.file.path;
     fs.readFile(filePath, function(err, data){
