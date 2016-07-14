@@ -1,0 +1,8 @@
+{
+    "s3-bucket-name": "lsfirstbucket",
+    "crypt_algorithm": "aes-256-ctr",
+    "server_password": "rny68WsXQBGvKnK8",
+    "slug_split_string": "&&&&",
+    "ServerSideEncryption": "AES256",
+    "server_base_address": "http://localhost:8080/"
+}

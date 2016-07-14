@@ -1,25 +1,28 @@
 var crypto = require('crypto'),
-    crypt_algorithm = 'aes-256-ctr',
-    //TODO: store password in a safe place, outsice source control
-    server_password = 'rny68WsXQBGvKnK8';
-
+    config = require('../config'),
+    crypt_algorithm = config['crypt_algorithm'],
+    //TODO: store password in a safe place, outside source control
+    server_password = config['server_password'],
+    slug_split_string = config['slug_split_string'];
 
 module.exports = {
     /*
         *   Creates a url safe string that is hard to guess
         *   TODO:
-        *       1) Considet pad short file names with a random string so they would be harder to guess.
-        *       2) Or better yet, do not use the file name at all
+        *       To make it harder for attackers to fake links, and get access to expired links
+        *       Do not save the file in it's original name (needs support from the storage module)
+        *       Instead use a random string and the timestamp
+        *       Use the timestamp to retrive the file, this way fake timestamps will not mach to a file
+        *       Then, instead of encrypting everything, we could just hash the password.
     */
     generate: function(fileName, password){
-        return encrypt([Date.now(), password, fileName].join('&&&&'))
+        return encrypt([Date.now(), password, fileName].join(slug_split_string))
     },
 
     parse: function(slug) {
         var result = []
         try {
-            result = decrypt(slug).split('&&&&');
-            console.log(result)
+            result = decrypt(slug).split(slug_split_string);
         } catch (e) {
             console.log(slug, e)
         } finally {

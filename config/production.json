@@ -1,0 +1,8 @@
+{
+    "s3-bucket-name": "your-production-bucket",
+    "crypt_algorithm": "aes-256-ctr",
+    "server_password": "your-production-password",
+    "slug_split_string": "&&&&",
+    "ServerSideEncryption": "AES256",
+    "server_base_address": "your-production-server-adress"
+}

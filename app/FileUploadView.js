@@ -60,7 +60,7 @@ const FileUploadView = Backbone.View.extend({
             type: 'POST'
         })
         .done((response) => {
-            if(response && response.link)
+            if(response && response.link && response.slug)
                 this.collection.add(new Backbone.Model({link: response.link, slug: response.slug}))
         })
         .fail((error) => {
@@ -81,6 +81,7 @@ const FileUploadView = Backbone.View.extend({
         if(pwd.length > 0 && !this.pwdRegex.test(pwd)){
             isValid = false
             this.$('.file-pwd-container')
+                //TODO: store this in a template
                 .append(`<span class="validation-warning">If provided, Password must contain at least 6 charachters,
                     have at least one of each: Uppercase letters, Lowercase letters and Numbers.
                     Allowed special charachters: '!', '@', '#', '$' and '%'</span>`)

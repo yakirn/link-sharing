@@ -9,7 +9,9 @@ var express = require('express'),
             cb(null, 'LinkSharing' + file.fieldname + '-' + Date.now());
         }
     }),
-    upload = multer({storage: storage});
+    upload = multer({storage: storage}),
+    config = require('../config'),
+    server_base_address = config['server_base_address'];
 /*
     *   This route handles file uploads using multer package and responds with a url to retreive the file.
     *   params:
@@ -29,13 +31,12 @@ router.post('/', upload.single('fileupload'), function(req, res, next){
             console.log(err)
             res.status(500).json(err)
         }
-        //TODO: Find a way to get the base address from code or use config
         else {
         const slug = 'files/' + secureSlug.generate(storeFileKey, password)
-            //TODO: Find a way to get the base address from code or use config
-            res.json({status: 'success', link: 'http://localhost:8080/' + slug, slug: slug})
+            res.json({status: 'success', link: server_base_address + slug, slug: slug})
         }
 
+        // Deleting the temp file, it's safe in the cloud now
         fs.unlinkSync(filePath);
     })
 });
