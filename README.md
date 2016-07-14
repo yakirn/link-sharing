@@ -22,7 +22,7 @@ Share files in a secure way for free!
 
 ### Assumtions
 1. For this project, I favor generating long links over short ones, because I assumed we would favor security over links readability.
-2. I chose S3 (Amazon Simple Storage Service) as the file storage over a database because it would be the best solution in terms of scalability; it reduces complexity in development and deployment; It supports storing the files encrypted out of the box, and is much more resilient to errors
+2. I chose S3 (Amazon Simple Storage Service) as the file storage over a database because it would be the best solution in terms of scalability; it reduces complexity in development and deployment; It supports storing the files encrypted out of the box, and is much more resilient to errors.
 3. My "non cloud storage" choice would probably be a MongoDB database for the Meta, and storing the files in GridFS
 4. I chose Node JS as the server platform because of its non-blocking IO model, which seemed well fitted for handling large files and long network calls.
 5. I favored a relatively simple API, but one that might be slower, over an API that works faster but it is more complicated and harder to consume, following the requirement for a simple first implementation.
@@ -34,13 +34,13 @@ Share files in a secure way for free!
 2. The biggest potential for errors comes from the fact that we save each file the user uploads to a temp directory on disk. If several users will upload very large files simultaneously we can potentially run out of space, which would fail the uploads. To overcome this we can:
   1. Reply to an upload request with a secured form that will let the user upload directly to S3. This would dramatically reduce server load, and increase upload speed. But comes in a price of a more complex to consume API, see http://aws.amazon.com/articles/1434.
   2. Alternatively, we can split large files to chunks and stream each chunk directly to S3 without saving to disk.
-3. Downloads are streamed through are server, which raise the potential of using to much memory. To overcome this we can reply with a "one time" direct link to the file in S3 instead, see http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrl-property.
+3. Downloads are streamed through the server, which raise the potential of using to much memory. To overcome this we can reply with a "one time" direct link to the file in S3 instead, see http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrl-property.
 4. In order to always serve the static pages fast, it is a good idea to separate the API server from the static files (html/css/js) server, this is a relatively easy refactoring to do. Also creating a versioned API (api/v1/files) is always a good idea.
 5. Although I didn't try this, It shouldn't be a problem to scale out and deploy more instances of the server under a load balancer if we see memory / disk usage gets too high.
 6. Client can have a ton of features, such as:
   1. Display when a link is expired.
-  2. Hide the full link and give "a copy to clipboard button"
-  3. Persist links to local/session storage to support navigation
+  2. Hide the full link and give "a copy to clipboard button".
+  3. Persist links to local/session storage to support navigation.
 
 
 
