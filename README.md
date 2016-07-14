@@ -5,7 +5,7 @@ Share files in a secure way for free!
 
 ### Prerequisites
 1. Node JS v6.3.0 or later with npm
-2. AWS account and valid credentials to read/write from s3 (`~/.aws/credentials` file)
+2. AWS account and valid credentials to read/write from S3 (`~/.aws/credentials` file)
 3. A bucket for the app to store files in.
 4. A user with permissions to write to the temp directory ($TMPDIR)
 
@@ -14,25 +14,10 @@ Share files in a secure way for free!
 2. `cd link-sharing && npm install`.
 3. Make sure you have the following enviroment variables set:
   1.  AWS_PROFILE - if you use a profile other than default in your aws credentials file.
-  2.  PORT - the port you want the serve to listen to (defaults to 8080).
+  2.  PORT - the port you want the server to listen to (defaults to 8080).
   3.  NODE_ENV - (defaults to development).
 4. Edit config (under `/path/to/repo/config/production.json`).
 5. Run using `npm start`.
-
-## Notes
-
-### Prerequisites
-1. Node JS v6.3.0 or later with npm
-2. AWS account and valid credentials to read/write from s3 (`~/.aws/credentials` file)
-3. A bucket for the app to store files in.
-4. A user with permissions to write to the temp directory ($TMPDIR)
-
-### How to deploy
-1. Clone repository
-2. `cd link-sharing && npm install`
-3. Run `webpack`
-4. Edit config (not implemented yet) 
-5. Run using `npm start` or `AWS_PROFILE=my-profile npm start` (Use the user with permissions)
 
 ## Notes
 
