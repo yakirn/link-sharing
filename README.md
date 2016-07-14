@@ -6,7 +6,7 @@ Share files in a secure way for free!
 ### Prerequisites
 1. Node JS v6.3.0 or later with npm
 2. AWS account and valid credentials to read/write from S3 (`~/.aws/credentials` file)
-3. A bucket for the app to store files in.
+3. An S3 bucket for the app to store files in.
 
 ### How to deploy
 1. Clone repository.
